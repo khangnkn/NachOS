@@ -29,7 +29,6 @@ int main(int argc, char const *argv[])
     while (rSize != 0 && rSize != -1)
     {
         Write(buf, rSize, desFile);
-        ConsolePrint(buf);
         rSize = Read(buf, size, srcFile);
     }
 
