@@ -205,6 +205,7 @@ void handleSC_Read()
     /* int Read(char *buffer, int size, OpenFileId id);
 	* Input: buffer: return buffer
 	* Output: -1 if fail; else size
+	* Output -2 when eof reached or consoleRead
     * Type: 0 - Read + Write
     *       1 - Read Only
     *       2 - stdin
@@ -254,11 +255,17 @@ void handleSC_Read()
 		realSize = fileSystem->openf[fileID]->Read(buf, size);
 		//currPos = fileSystem->openf[fileID]->GetCurrentPos();
 		//realSize = currPos - prevPos;
-		System2User(virtualAddr, realSize, buf);
-		machine->WriteRegister(2, realSize);
-		delete buf;
-		IncreasePC();
-		return;
+		if (realSize == 0) {
+			machine->WriteRegister(2, -2);
+			IncreasePC();
+			return;
+		} else {
+			System2User(virtualAddr, realSize, buf);
+			machine->WriteRegister(2, realSize);
+			delete buf;
+			IncreasePC();
+			return;
+		}
 	}
 }
 

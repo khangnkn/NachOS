@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
     desFile = Open(filename_out, 0);
 
     rSize = Read(buf, size, srcFile);
-    while (rSize != 0 && rSize != -1)
+    while (rSize != -2 && rSize != -1)
     {
         Write(buf, rSize, desFile);
         rSize = Read(buf, size, srcFile);

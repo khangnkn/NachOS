@@ -21,7 +21,7 @@ int main()
 		rSize = Read(buf, size, srcFile);
 		ConsolePrint("Read\n");
 		
-		while (rSize != 0)
+		while (rSize != -2)
 		{
 
 			Write(buf, rSize, stdout);
