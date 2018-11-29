@@ -100,22 +100,30 @@ AddrSpace::AddrSpace(OpenFile *executable)
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero(machine->mainMemory, size);
+        bzero(machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
+    /*if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
 			noffH.code.virtualAddr, noffH.code.size);
+        printf("Initializing code segment, at 0x%d, size %d, virtualAddr %d\n", 
+			noffH.code.virtualAddr, noffH.code.size, noffH.code.inFileAddr);
         executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
 			noffH.code.size, noffH.code.inFileAddr);
     }
     if (noffH.initData.size > 0) {
         DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
 			noffH.initData.virtualAddr, noffH.initData.size);
+        printf("Initializing data segment, at 0x%d, size %d, virtualAddr %d\n", 
+			noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr);
         executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
 			noffH.initData.size, noffH.initData.inFileAddr);
+    }*/
+    for (i = 0; i < numPages; i++) {
+        executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),
+		PageSize, (pageTable[i].virtualPage * PageSize + 40));
     }
-
+    
 }
 
 //----------------------------------------------------------------------

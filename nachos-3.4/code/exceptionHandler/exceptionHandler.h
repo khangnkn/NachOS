@@ -43,3 +43,6 @@ void handleSC_Write();
 
 // Hander for SC_Seek
 void handleSC_Seek();
+
+// Handler for SC_Exec
+void handleSC_Exec();

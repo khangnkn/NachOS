@@ -142,6 +142,9 @@ void ExceptionHandler(ExceptionType which)
 			case SC_Seek:
 				handleSC_Seek();
 				return;
+			case SC_Exec:
+				handleSC_Exec();
+				return;
 		}
 	}
 }
