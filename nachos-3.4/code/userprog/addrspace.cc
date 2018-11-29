@@ -89,8 +89,9 @@ AddrSpace::AddrSpace(OpenFile *executable)
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
 	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	pageTable[i].physicalPage = i;
-	pageTable[i].valid = TRUE;
+	pageTable[i].physicalPage = gPhysPageBitMap->Find();
+	gPhysPageBitMap->Mark(pageTable[i].physicalPage);
+    pageTable[i].valid = TRUE;
 	pageTable[i].use = FALSE;
 	pageTable[i].dirty = FALSE;
 	pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
@@ -100,7 +101,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-        bzero(machine->mainMemory, size);
+//        bzero(machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
     /*if (noffH.code.size > 0) {
@@ -121,7 +122,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
     }*/
     for (i = 0; i < numPages; i++) {
         executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),
-		PageSize, (pageTable[i].virtualPage * PageSize + 40));
+		PageSize, (pageTable[i].virtualPage  * PageSize + 40));
+        
     }
     
 }
@@ -133,6 +135,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
+    int i;
+    for (i = 0; i < numPages; i++) {
+        gPhysPageBitMap->Clear(pageTable[i].virtualPage);
+    }
    delete pageTable;
 }
 

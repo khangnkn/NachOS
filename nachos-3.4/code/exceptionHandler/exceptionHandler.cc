@@ -411,7 +411,7 @@ void handleSC_Exec()
 	char * filename = NULL;
 	AddrSpace * space;
 	printf("Checkpoint 1!\n");
-	Thread * thread = new Thread("exec");
+	Thread * thread = new Thread(filename);
 	virtAddr = machine->ReadRegister(4);
 	
 	filename = User2System(virtAddr, MaxFileLength + 1);
@@ -429,10 +429,17 @@ void handleSC_Exec()
 	printf("Checkpoint 4!\n");
 	thread->space = space;
 	printf("Checkpoint 5!\n");
-	thread->Fork((VoidFunctionPtr)space, 1);
+	thread->Fork(DummyForFork, 0);
 	printf("Checkpoint 6!\n");
 	delete filename;
 	machine->WriteRegister(2, 1);
 	IncreasePC();
+	return;
+}
+
+void DummyForFork(int arg) {
+	currentThread->space->InitRegisters();
+	currentThread->space->RestoreState();
+	machine->Run();
 	return;
 }

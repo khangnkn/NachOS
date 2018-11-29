@@ -39,6 +39,11 @@ extern Machine* machine;	// user program memory and registers
 extern SynchConsole* gSynchConsole;
 #endif
 
+#ifdef USER_PROGRAM
+#include "bitmap.h"
+extern BitMap * gPhysPageBitMap;
+#endif
+
 #ifdef FILESYS_NEEDED 		// FILESYS or FILESYS_STUB 
 #include "filesys.h"
 extern FileSystem  *fileSystem;

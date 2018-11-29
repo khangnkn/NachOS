@@ -35,6 +35,9 @@ Machine *machine;	// user program memory and registers
 SynchConsole* gSynchConsole;	// user program memory and registers
 #endif
 
+#ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
+BitMap* gPhysPageBitMap;	// user program memory and registers
+#endif
 
 #ifdef NETWORK
 PostOffice *postOffice;
@@ -160,6 +163,10 @@ Initialize(int argc, char **argv)
     gSynchConsole = new SynchConsole();	// this must come first
 #endif
 
+#ifdef USER_PROGRAM
+    gPhysPageBitMap = new BitMap(NumPhysPages);	// this must come first
+#endif
+
 #ifdef FILESYS
     synchDisk = new SynchDisk("DISK");
 #endif
@@ -190,6 +197,10 @@ Cleanup()
 #endif
 #ifdef USER_PROGRAM
     delete gSynchConsole;
+#endif
+
+#ifdef USER_PROGRAM
+    delete gPhysPageBitMap;
 #endif
 
 #ifdef FILESYS_NEEDED

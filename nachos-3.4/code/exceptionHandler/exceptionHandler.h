@@ -14,6 +14,9 @@ char* User2System(int virtAddr, int limit);
 // Chuc nang: Sao chep vung nho System sang vung nho User
 int System2User(int virtAddr, int len, char* buffer);
 
+// Something...
+void DummyForFork(int arg);
+
 // Handler for SC_Halt
 void handleSC_Halt();
 
