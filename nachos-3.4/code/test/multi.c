@@ -5,10 +5,9 @@ int
 main()
 {
     char * fun;
-    ConsolePrint("Entry...");
     Exec("./test/ping");
     //Exec("./test/cat");
-    // Exec("./test/pong");
+    Exec("./test/pong");
     //ConsoleRead(fun, 255);
     return 0;
 }

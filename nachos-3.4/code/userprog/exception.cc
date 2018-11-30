@@ -118,7 +118,7 @@ void ExceptionHandler(ExceptionType which)
 
 			case SC_PrintChar:
 				handleSC_PrintChar();
-				break;
+				return;
 
 			case SC_ConsolePrint:
 				handleSC_ConsolePrint();

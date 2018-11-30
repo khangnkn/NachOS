@@ -1,9 +1,10 @@
 #include "syscall.h"
 
-int
-main() {
+void main()
+{
     int i;
-    for (i = 0; i < 100; i++) {
-        ConsolePrint("B");
-    }
+    char * c;
+    for (i = 0; i < 200; i++)
+        PrintChar('B');
+    Halt();
 }

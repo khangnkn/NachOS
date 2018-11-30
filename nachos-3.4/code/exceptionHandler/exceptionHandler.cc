@@ -121,8 +121,8 @@ void handleSC_ConsolePrint()
 	char* buffer;
 	virtAddr = machine->ReadRegister(4);
 	buffer = User2System(virtAddr, 255); // Copy chuoi tu vung nho User Space sang System Space voi bo dem buffer dai 255 ki tu
-	int length = 0;
-	while (buffer[length] != 0) length++; // Dem do dai that cua chuoi
+	// int length = 0;
+	// while (buffer[length] != 0) length++; // Dem do dai that cua chuoi
 
 	gSynchConsole->Write(buffer, 255); // Goi ham Write cua SynchConsole de in chuoi
 	delete buffer; 
@@ -410,12 +410,10 @@ void handleSC_Exec()
 	int virtAddr;
 	char * filename = NULL;
 	AddrSpace * space;
-	printf("Checkpoint 1!\n");
 	Thread * thread = new Thread(filename);
 	virtAddr = machine->ReadRegister(4);
 	
 	filename = User2System(virtAddr, MaxFileLength + 1);
-	printf("Checkpoint 2!\n");
 	if (filename == NULL) {
 		printf("Unable to open file %s.\n", filename);
 		DEBUG('a', "Unable to open file %s.\n", filename);
@@ -423,14 +421,10 @@ void handleSC_Exec()
 		IncreasePC();
 		return;
 	}
-	printf("Checkpoint 3!\n");
 	OpenFile * executable = fileSystem->Open(filename);
 	space = new AddrSpace(executable);
-	printf("Checkpoint 4!\n");
 	thread->space = space;
-	printf("Checkpoint 5!\n");
 	thread->Fork(DummyForFork, 0);
-	printf("Checkpoint 6!\n");
 	delete filename;
 	machine->WriteRegister(2, 1);
 	IncreasePC();
