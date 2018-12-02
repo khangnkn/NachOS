@@ -3,7 +3,9 @@
 void main()
 {
     int i;
+    char * c;
     for (i = 0; i < 200; i++)
         PrintChar('A');
-    ConsolePrint(" end ");
+    ConsolePrint(" enda ");
+    ConsoleRead(c, 1);
 }
