@@ -9,5 +9,6 @@ main()
     //Exec("./test/cat");
     Exec("./test/pong");
     //ConsoleRead(fun, 255);
+    ConsoleRead(fun, 255);
     return 0;
 }

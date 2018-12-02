@@ -65,7 +65,7 @@ void handleSC_Create()
         DEBUG('a', "Invalid filename.\n");
         printf("Invalid filename.\n");
         machine->WriteRegister(2, -1);
-        IncreasePC();
+         
         return;
     }
 
@@ -73,7 +73,7 @@ void handleSC_Create()
     {
         DEBUG('a', "Filename is NULL.\n");
         machine->WriteRegister(2, -1);
-        IncreasePC();
+         
         return;
     }
 
@@ -84,13 +84,13 @@ void handleSC_Create()
         printf("Error create file %s", filename);
 		machine->WriteRegister(2, -1);
 		delete filename;
-		IncreasePC();
+		 
 		return;
     }
 
     machine->WriteRegister(2, 0);
     delete filename;
-    IncreasePC();
+     
     return;
 }
 
@@ -107,7 +107,7 @@ void handleSC_ConsoleRead()
 	gSynchConsole->Read(buffer, length); // Goi ham Read cua SynchConsole de doc chuoi
 	System2User(virtAddr, length, buffer); // Copy chuoi tu vung nho System Space sang vung nho User Space
 	delete buffer; 
-	IncreasePC(); // Tang Program Counter 
+	  // Tang Program Counter 
 	return;
 }
 
@@ -126,7 +126,7 @@ void handleSC_ConsolePrint()
 
 	gSynchConsole->Write(buffer, 255); // Goi ham Write cua SynchConsole de in chuoi
 	delete buffer; 
-	IncreasePC(); // Tang Program Counter 
+	  // Tang Program Counter 
 	return;
 }
 
@@ -134,7 +134,7 @@ void handleSC_PrintChar()
 {
 	char c = (char)machine->ReadRegister(4);
 	gSynchConsole->Write(&c, 1); // In ky tu tu bien c, 1 byte
-	IncreasePC();
+	 
 	return;
 }
 
@@ -170,12 +170,12 @@ void handleSC_Open()
 			machine->WriteRegister(2, 1); //tra ve OpenFileID
 		}
 		delete[] filename;
-		IncreasePC();
+		 
 		return;
 	}
 	machine->WriteRegister(2, -1); //Khong mo duoc file return -1
 	delete[] filename;
-	IncreasePC();
+	 
 	return;
 }
 
@@ -196,7 +196,7 @@ void handleSC_Close()
 		}
 	}
 	machine->WriteRegister(2, -1);
-	IncreasePC();
+	 
 	return;
 }
 
@@ -221,7 +221,7 @@ void handleSC_Read()
 		DEBUG('a', "Fail to read file.\nFileID is out of openf table.\n");
 		printf("Fail to read file.\nFileID is out of openf table.\n");
 		machine->WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	/* File chua duoc mo.*/
@@ -229,7 +229,7 @@ void handleSC_Read()
 		DEBUG('a', "Fail to read file.\nFile has not been opened yet.\n");
 		printf("Fail to read file.\nFile has not been opened yet.\n");
 		machine->WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	/* Mo file stdout*/
@@ -237,7 +237,7 @@ void handleSC_Read()
 		DEBUG('a', "Fail to read file.\nStdout is not readable.\n");
 		printf("Fail to read file.\nStdout is not readable.\n");
 		machine->WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	/* Doc file thanh cong*/
@@ -249,7 +249,7 @@ void handleSC_Read()
 		System2User(virtualAddr, realSize, buf);
 		machine->WriteRegister(2, realSize);
 		delete buf;
-		IncreasePC();
+		 
 		return;
 	} else {
 		realSize = fileSystem->openf[fileID]->Read(buf, size);
@@ -257,13 +257,13 @@ void handleSC_Read()
 		//realSize = currPos - prevPos;
 		if (realSize == 0) {
 			machine->WriteRegister(2, -2);
-			IncreasePC();
+			 
 			return;
 		} else {
 			System2User(virtualAddr, realSize, buf);
 			machine->WriteRegister(2, realSize);
 			delete buf;
-			IncreasePC();
+			 
 			return;
 		}
 	}
@@ -289,7 +289,7 @@ void handleSC_Write()
 		DEBUG('a', "Fail to write file.\nFileID is out of openf table.\n");
 		printf("Fail to write file.\nFileID is out of openf table.\n");
 		machine -> WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	//Kiem tra file co ton tai khong
@@ -298,7 +298,7 @@ void handleSC_Write()
 		DEBUG('a', "Fail to write file.\nFile has not been opened yet.\n");
 		printf("Fail to write file.\nFile has not been opened yet.\n");
 		machine -> WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	//Xet truong hop ghi file only read (type=1) hoac file stdin (type=2) thi tra ve -1
@@ -307,7 +307,7 @@ void handleSC_Write()
 		DEBUG('a', "Fail to write file.\nStdin could not be written.\n");
 		printf("Fail to write file.\nStdin could not be written.\n");
 		machine->WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 
@@ -322,7 +322,7 @@ void handleSC_Write()
 			newPos = fileSystem -> openf[id] -> GetCurrentPos();
 			machine -> WriteRegister(2, newPos - oldPos);
 			delete buf;
-			IncreasePC();
+			 
 			return;
 		}
 	}
@@ -338,11 +338,11 @@ void handleSC_Write()
 		gSynchConsole->Write(buf+i, 1);
 		machine->WriteRegister(2, i-1);
 		delete buf;
-		IncreasePC();
+		 
 		return;
 	}
 	delete buf;
-	IncreasePC();
+	 
 	return;
 }
 
@@ -359,7 +359,7 @@ void handleSC_Seek()
 		DEBUG('a', "Fail to seek file.\nFileID is out of openf table.\n");
 		printf("Fail to seek file.\nFileID is out of openf table.\n");
 		machine->WriteRegister(2, -1);//gan ket qua khong thanh cong vo thanh ghi r2
-		IncreasePC();//Luu d/c cua lenh ke tiep de thuc hien
+		 //Luu d/c cua lenh ke tiep de thuc hien
 		return;
 	}
 	// Kiem tra file co ton tai khong
@@ -368,7 +368,7 @@ void handleSC_Seek()
 		DEBUG('a', "Fail to seek file.\nFile has not been opened yet.\n");
 		printf("Fail to seek file.\nFile has not been opened yet.\n");
 		machine->WriteRegister(2, -1);//gan ket qua khong thanh cong vo thanh ghi r2
-		IncreasePC();//Luu d/c cua lenh ke tiep de thuc hien
+		 //Luu d/c cua lenh ke tiep de thuc hien
 		return;
 	}
 	// Kiem tra co goi Seek tren console khong
@@ -378,7 +378,7 @@ void handleSC_Seek()
 		DEBUG('a', "Fail to seek file. Console IO could not be seeked.\n");
 		printf("Fail to seek file. Console IO could not be seeked.\n");
 		machine->WriteRegister(2, -1);//gan ket qua khong thanh cong vo thanh ghi r2
-		IncreasePC();
+		 
 		return;
 	}
 	// Neu pos = -1 thi gan pos = Length nguoc lai thi giu nguyen pos
@@ -395,7 +395,7 @@ void handleSC_Seek()
 		fileSystem->openf[id]->Seek(pos);
 		machine->WriteRegister(2, pos);//gan ket qua thanh cong la vi tri thuc su trong file vo r2
 	}
-	IncreasePC();//Luu d/c cua lenh ke tiep de thuc hien
+	 //Luu d/c cua lenh ke tiep de thuc hien
 	return;
 }
 
@@ -418,7 +418,7 @@ void handleSC_Exec()
 		printf("Unable to open file %s.\n", filename);
 		DEBUG('a', "Unable to open file %s.\n", filename);
 		machine->WriteRegister(2, -1);
-		IncreasePC();
+		 
 		return;
 	}
 	OpenFile * executable = fileSystem->Open(filename);
@@ -427,7 +427,7 @@ void handleSC_Exec()
 	thread->Fork(DummyForFork, 0);
 	delete filename;
 	machine->WriteRegister(2, 1);
-	IncreasePC();
+	 
 	return;
 }
 

@@ -43,7 +43,7 @@
 //
 //	The result of the system call, if any, must be put back into r2. 
 //
-// And don't forget to increment the pc before returning. (Or else you'll
+// And don't forget to increment the pc before  breaking. (Or else you'll
 // loop making the same system call forever!
 //
 //	"which" is the kind of exception.  The list of possible exceptions 
@@ -57,7 +57,7 @@ void ExceptionHandler(ExceptionType which)
 	switch (which)
 	{
 	case NoException:
-		return;
+		 break;
 
 	case PageFaultException:
 		DEBUG('a', "\n No valid translation found");
@@ -106,46 +106,48 @@ void ExceptionHandler(ExceptionType which)
 		{
 			case SC_Halt:
 				handleSC_Halt();
-				return;
+				 break;
 
 			case SC_CreateFile:
 				handleSC_Create();
-				return;
+				 break;
 			
 			case SC_ConsoleRead:
 				handleSC_ConsoleRead();
-				return;
+				 break;
 
 			case SC_PrintChar:
 				handleSC_PrintChar();
-				return;
+				 break;
 
 			case SC_ConsolePrint:
 				handleSC_ConsolePrint();
-				return;
+				 break;
 
 			case SC_Open:
 				handleSC_Open();
-				return;
+				 break;
 
 			case SC_Close:
 				handleSC_Close();
-				return;		
+				 break;		
 			case SC_Read:
 				handleSC_Read();
-				return;
+				 break;
 
 			case SC_Write:
 				handleSC_Write();
-				return;
+				 break;
 
 			case SC_Seek:
 				handleSC_Seek();
-				return;
+				 break;
 			case SC_Exec:
 				handleSC_Exec();
-				return;
+				 break;
 		}
+		IncreasePC();
+		return;
 	}
 }
 

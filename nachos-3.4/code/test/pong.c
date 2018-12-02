@@ -6,5 +6,5 @@ void main()
     char * c;
     for (i = 0; i < 200; i++)
         PrintChar('B');
-    Halt();
+    ConsolePrint(" endb ");
 }

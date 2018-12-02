@@ -108,7 +108,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 //        bzero(machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
-    /*if (noffH.code.size > 0) {
+/*    if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
 			noffH.code.virtualAddr, noffH.code.size);
         printf("Initializing code segment, at 0x%d, size %d, virtualAddr %d\n", 
@@ -123,7 +123,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
 			noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr);
         executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
 			noffH.initData.size, noffH.initData.inFileAddr);
-    }*/
+    }
+    */
     for (i = 0; i < numPages; i++) {
         executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage * PageSize]),
 		PageSize, (pageTable[i].virtualPage  * PageSize + 40));
