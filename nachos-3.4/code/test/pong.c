@@ -7,5 +7,5 @@ void main()
     for (i = 0; i < 200; i++)
         PrintChar('B');
     ConsolePrint(" endb ");
-    ConsoleRead(c, 1);
+//    ConsoleRead(c, 1);
 }

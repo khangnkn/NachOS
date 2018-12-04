@@ -6,9 +6,8 @@ main()
 {
     char * fun;
     Exec("./test/ping");
-    //Exec("./test/cat");
     Exec("./test/pong");
-    //ConsoleRead(fun, 255);
-    ConsoleRead(fun, 255);
+    ConsoleRead(fun, 1);
+    Halt();    
     return 0;
 }

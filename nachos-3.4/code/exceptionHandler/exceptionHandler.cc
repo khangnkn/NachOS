@@ -5,6 +5,11 @@ void IncreasePC()
     int counter = machine->ReadRegister(PCReg);
    	machine->WriteRegister(PrevPCReg, counter);
     counter = machine->ReadRegister(NextPCReg);
+  	if(counter == 40) {
+		printf("Thread finished!\n");
+		currentThread->Finish();
+		return;
+	} 
     machine->WriteRegister(PCReg, counter);
    	machine->WriteRegister(NextPCReg, counter + 4);
 }
@@ -386,10 +391,10 @@ void handleSC_Exec()
 	int virtAddr;
 	char * filename = NULL;
 	AddrSpace * space;
-	Thread * thread = new Thread(filename);
+	
 	virtAddr = machine->ReadRegister(4);
 	
-	filename = User2System(virtAddr, MaxFileLength + 1);
+	filename = User2System(virtAddr, 255);
 	if (filename == NULL) {
 		printf("Unable to open file %s.\n", filename);
 		DEBUG('a', "Unable to open file %s.\n", filename);
@@ -397,6 +402,8 @@ void handleSC_Exec()
 		 
 		return;
 	}
+	scheduler->Print();
+	Thread * thread = new Thread(filename);
 	OpenFile * executable = fileSystem->Open(filename);
 	space = new AddrSpace(executable);
 	thread->space = space;
