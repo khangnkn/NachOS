@@ -125,6 +125,10 @@ Scheduler::Run (Thread *nextThread)
         delete threadToBeDestroyed;
 	threadToBeDestroyed = NULL;
     }
+/*    if (oldThread != NULL) {
+        delete oldThread;
+        oldThread = NULL;
+    }*/
     
 #ifdef USER_PROGRAM
     if (currentThread->space != NULL) {		// if there is an address space

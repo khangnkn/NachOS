@@ -130,21 +130,27 @@ void ExceptionHandler(ExceptionType which)
 
 			case SC_Close:
 				handleSC_Close();
-				 break;		
+				 break;
+
 			case SC_Read:
 				handleSC_Read();
 				 break;
 
 			case SC_Write:
 				handleSC_Write();
-				 break;
+				break;
 
 			case SC_Seek:
 				handleSC_Seek();
-				 break;
+				break;
+
 			case SC_Exec:
 				handleSC_Exec();
-				 break;
+				break;
+
+			case SC_Exit:
+				handleSC_Exit();
+				return;
 		}
 		IncreasePC();
 		return;

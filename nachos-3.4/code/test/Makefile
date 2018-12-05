@@ -35,7 +35,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort createFile cat echo copy multi ping pong
+all: halt shell matmult sort createFile cat echo copy scheduler ping pong
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -93,11 +93,11 @@ copy: copy.o start.o
 	$(LD) $(LDFLAGS) start.o copy.o -o copy.coff
 	../bin/coff2noff copy.coff copy
 
-multi.o: multi.c
-	$(CC) $(CFLAGS) -c multi.c
-multi: multi.o start.o
-	$(LD) $(LDFLAGS) start.o multi.o -o multi.coff
-	../bin/coff2noff multi.coff multi
+scheduler.o: scheduler.c
+	$(CC) $(CFLAGS) -c scheduler.c
+scheduler: scheduler.o start.o
+	$(LD) $(LDFLAGS) start.o scheduler.o -o scheduler.coff
+	../bin/coff2noff scheduler.coff scheduler
 
 ping.o: ping.c
 	$(CC) $(CFLAGS) -c ping.c
