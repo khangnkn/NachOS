@@ -49,3 +49,6 @@ void handleSC_Seek();
 
 // Handler for SC_Exec
 void handleSC_Exec();
+
+// Handler for SC_Exit
+void handleSC_Exit();
