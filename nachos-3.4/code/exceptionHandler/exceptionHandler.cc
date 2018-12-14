@@ -395,19 +395,22 @@ void handleSC_Exec()
 		machine->WriteRegister(2, -1);
 		return;
 	}
-	Thread * thread = new Thread(filename);
-	gThread->Append(thread);
+	//Thread * thread = new Thread(filename);
+	//gThread->Append(thread);
 	OpenFile * executable = fileSystem->Open(filename);
-	space = new AddrSpace(executable);
-	thread->space = space;
-	thread->Fork(DummyForFork, 0);
-	delete filename;
-	machine->WriteRegister(2, 1);
-	 
+	if(executable==NULL)
+	{
+		printf("Unable to open file %s.\n", filename);
+		machine->WriteRegister(2, -1);
+		return;
+	}
+	int pid = pTab -> ExecUpdate(filename);
+	machine -> WriteRegister(2, pid);
 	return;
 }
 
-void handleSC_Exit() {
+void handleSC_Exit() 
+{
 	Thread * oldThread;
 	oldThread = (Thread *)gThread->Remove();
 	if(oldThread == NULL) {
@@ -416,6 +419,18 @@ void handleSC_Exit() {
 	}
 	currentThread->Finish();
 	return;
+}
+
+void handleSC_Join()
+{
+	int virtAddr;
+	int id;
+	AddrSpace * space;
+	virtAddr = machine->ReadRegister(4);
+	
+	id = User2System(virtAddr, 255);
+	int result = pTab->JoinUpdate(id);
+	machine -> WriteRegister(2, result);
 }
 
 void DummyForFork(int arg) {

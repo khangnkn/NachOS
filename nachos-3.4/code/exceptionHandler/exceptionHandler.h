@@ -52,3 +52,6 @@ void handleSC_Exec();
 
 // Handler for SC_Exit
 void handleSC_Exit();
+
+// Handler for SC_Join
+void handleSC_Join();

@@ -71,14 +71,14 @@ char* PCB::GetNameThread()
 //-------------------------------------------------------------------
 void PCB::JoinWait()
 {
-	JoinStatus= parentID;
-	IncNumWait();
+	// JoinStatus= parentID;
+	// IncNumWait();
 	joinsem->P();
 }
 
 void PCB::JoinRelease()
 {
-	DecNumWait();
+	//DecNumWait();
 	joinsem->V();
 }
 
@@ -93,43 +93,44 @@ void PCB::ExitRelease()
 }
 
 //------------------------------------------------------------------
-int PCB::Exec(char *filename, int pID)
+int PCB::Exec(char *filename, int id)
 {
 	mutex->P();
-	thread= new Thread(filename);
+	thread = new Thread(filename);
 	if(thread == NULL)
 	{
 		printf("\nLoi: Khong tao duoc tien trinh moi !!!\n");
 		mutex->V();
 		return -1;
 	}
-	thread->processID= pID;
-	//Cho nay tam thoi chua xu ly!
-
+	thread->processID = id;
 	
-	//thread->Fork(MyStartProcess,pID);
+	parentID = currentThread->processID;
+	
+	thread->Fork(MyStartProcess,id);
 	mutex->V();
-	return pID;
+	return id;
 }
 
 
 //*************************************************************************************
-// void MyStartProcess(int pID)
-// {
-// 	char *filename= processTab->GetName(pID);
-// 	AddrSpace *space= new AddrSpace(filename);
-// 	if(space == NULL)
-// 	{
-// 		printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
-// 		return; 
-// 	}
-// 	currentThread->space= space;
+void MyStartProcess(int pID) //truyen vao vi tri cua PCB trong mang pcb o lop pTab
+{
+	char *filename = pTab->GetName(pID);
+	//char *fileName = this -> GetNameThread();
+	AddrSpace *space= new AddrSpace(fileName);
+	if(space == NULL)
+	{
+		printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
+		return; 
+	}
+	currentThread->space= space;
 
-// 	space->InitRegisters();		// set the initial register values
-// 	space->RestoreState();		// load page table register
+	space->InitRegisters();		// set the initial register values
+	space->RestoreState();		// load page table register
 
-// 	machine->Run();			// jump to the user progam
-// 	ASSERT(FALSE);			// machine->Run never returns;
-// 						// the address space exits
-// 						// by doing the syscall "exit"
-// }
+	machine->Run();			// jump to the user progam
+	ASSERT(FALSE);			// machine->Run never returns;
+						// the address space exits
+						// by doing the syscall "exit"
+}
