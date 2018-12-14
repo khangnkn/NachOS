@@ -38,6 +38,7 @@ Thread::Thread(char* threadName)
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
+    processID = 0;//Tien Trinh hien tai
 #ifdef USER_PROGRAM
     space = NULL;
 #endif

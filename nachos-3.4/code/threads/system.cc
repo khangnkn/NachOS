@@ -37,6 +37,8 @@ SynchConsole* gSynchConsole;	// user program memory and registers
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
 BitMap* gPhysPageBitMap;	// user program memory and registers
+PTable *pTab;	
+Semaphore *addrLock;	// semaphore
 #endif
 
 #ifdef NETWORK
@@ -165,6 +167,8 @@ Initialize(int argc, char **argv)
 
 #ifdef USER_PROGRAM
     gPhysPageBitMap = new BitMap(NumPhysPages);	// this must come first
+    addrLock = new Semaphore("addrLock", 1);
+    pTab = new PTable(10);//maximun 10 pcb
 #endif
 
 #ifdef FILESYS

@@ -77,6 +77,8 @@ USERPROG_H = ../userprog/addrspace.h\
 	../machine/mipssim.h\
 	../machine/translate.h\
 	../threads/synchcons.h\
+	../userprog/pcb.h\
+	../userprog/ptable.h\
 	../exceptionHandler/exceptionHandler.h
 
 USERPROG_C = ../userprog/addrspace.cc\
@@ -88,10 +90,12 @@ USERPROG_C = ../userprog/addrspace.cc\
 	../machine/mipssim.cc\
 	../machine/translate.cc\
 	../threads/synchcons.cc\
+	../userprog/pcb.cc\
+	../userprog/ptable.cc\
 	../exceptionHandler/exceptionHandler.cc
 
 USERPROG_O = addrspace.o bitmap.o exception.o progtest.o console.o machine.o \
-	mipssim.o translate.o synchcons.o exceptionHandler.o
+	mipssim.o translate.o synchcons.o exceptionHandler.o pcb.o ptable.o
 
 VM_H = 
 VM_C = 
