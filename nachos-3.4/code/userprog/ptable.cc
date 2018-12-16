@@ -69,14 +69,13 @@ int PTable::ExecUpdate(char* filename)
 ////////////////////////////////////////////////////////////
 
 	pcb[ID]= new PCB(ID);
-	bm->Mark(ID);
 	pcb[ID] -> parentID = currentThread -> processID;
 	int pID = pcb[ID]->Exec(filename,ID);
 	bmsem->V();
 	return pID;
 }
 
-int PTable::ExitUpdate(int exitccode)
+int PTable::ExitUpdate(int exitcode)
 {
 //Kiem tra pID co ton tai khong
 	int pID = currentThread->processID;
@@ -103,7 +102,7 @@ int PTable::ExitUpdate(int exitccode)
 		pcb[pID]->ExitWait();	
 	}
 	Remove(pID);
-	return ec;
+	return exitcode;
 }
 
 int PTable::JoinUpdate(int pID)
@@ -128,14 +127,14 @@ int PTable::JoinUpdate(int pID)
 		return -1;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////
-	IncNumWait(); //tang numwait
+	pcb[pID]->IncNumWait(); //tang numwait
 	pcb[pID]->JoinWait(); 	//doi den khi tien trinh con ket thuc
 
 	int exitCode = pcb[pID]->GetExitCode();
 
 	if(exitCode != 0)
 	{
-		printf("\nProcess exit with exitcode EC = %d ",ec);
+		printf("\nProcess exit with exitcode EC = %d ",exitCode);
 		return -1;
 	}
 
@@ -164,7 +163,7 @@ int PTable::GetFreeSlot()
 bool PTable::IsExist(int pID)
 {
 	if(pID<0 || pID>9)
-		return 0;
+		return FALSE;
 	return bm->Test(pID);
 }
 

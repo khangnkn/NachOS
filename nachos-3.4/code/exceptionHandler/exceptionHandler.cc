@@ -377,12 +377,6 @@ void handleSC_Seek()
 
 void handleSC_Exec()
 {
-	/* Get the filename
-	 * Check whether filename is valid
-	 * Openfile
-	 * Create thread
-	 * Thread->Fork(Process, ID)
-	 */
 	int virtAddr;
 	char * filename = NULL;
 	AddrSpace * space;
@@ -395,8 +389,7 @@ void handleSC_Exec()
 		machine->WriteRegister(2, -1);
 		return;
 	}
-	//Thread * thread = new Thread(filename);
-	//gThread->Append(thread);
+
 	OpenFile * executable = fileSystem->Open(filename);
 	if(executable==NULL)
 	{
@@ -406,36 +399,31 @@ void handleSC_Exec()
 	}
 	int pid = pTab -> ExecUpdate(filename);
 	machine -> WriteRegister(2, pid);
+	delete executable;
 	return;
 }
 
 void handleSC_Exit() 
 {
-	Thread * oldThread;
-	oldThread = (Thread *)gThread->Remove();
-	if(oldThread == NULL) {
-		printf("\nFinish executing all threads. ");
-		interrupt->Halt();
-	}
-	currentThread->Finish();
-	return;
+	int exitStatus;
+	exitStatus = machine->ReadRegister(4);
+	
+	int result = pTab->ExitUpdate(exitStatus);
+	machine -> WriteRegister(2, result);
 }
 
 void handleSC_Join()
 {
-	int virtAddr;
 	int id;
-	AddrSpace * space;
-	virtAddr = machine->ReadRegister(4);
+	id = machine->ReadRegister(4);
 	
-	id = User2System(virtAddr, 255);
 	int result = pTab->JoinUpdate(id);
 	machine -> WriteRegister(2, result);
 }
 
-void DummyForFork(int arg) {
-	currentThread->space->InitRegisters();
-	currentThread->space->RestoreState();
-	machine->Run();
-	return;
-}
+// void DummyForFork(int arg) {
+// 	currentThread->space->InitRegisters();
+// 	currentThread->space->RestoreState();
+// 	machine->Run();
+// 	return;
+// }

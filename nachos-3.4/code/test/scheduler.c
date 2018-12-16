@@ -1,14 +1,12 @@
 #include "syscall.h"
 
-// ./userprog/nachos -rs 1023 -x ./test/multi
-int
-main()
+int main()
 {
-    char * fun;
-    ConsolePrint(" \tAfter excuting ping/pong, press [ENTER] to halt.\n");
-    Exec("./test/ping");
-    Exec("./test/pong");
-    
-    ConsoleRead(fun, 1);  
+    int pingID, pongID;
+
+    pingID = Exec("./test/ping");
+    pongID = Exec("./test/pong");
+    Join(pingID);
+    Join(pongID);  
     return 0;
 }

@@ -150,7 +150,10 @@ void ExceptionHandler(ExceptionType which)
 
 			case SC_Exit:
 				handleSC_Exit();
-				return;
+				break;
+			case SC_Join:
+				handleSC_Join();
+				break;
 		}
 		IncreasePC();
 		return;

@@ -33,9 +33,10 @@ public:
 	void SetExitCode(int ec);
 	int GetExitCode();
 	char* GetNameThread();
+
 };
 
 //*********************************************************************************************************************
-//void MyStartProcess(int pID);//Thay cho DummyFork cua K, phai chinh lai trog addSpcae(char*filename);
+void MyStartProcess(int pID);//Thay cho DummyFork cua K, phai chinh lai trog addSpcae(char*filename);
 
 #endif

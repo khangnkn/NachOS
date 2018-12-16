@@ -96,18 +96,18 @@ void PCB::ExitRelease()
 int PCB::Exec(char *filename, int id)
 {
 	mutex->P();
-	thread = new Thread(filename);
+	this->thread = new Thread(filename);
 	if(thread == NULL)
 	{
 		printf("\nLoi: Khong tao duoc tien trinh moi !!!\n");
 		mutex->V();
 		return -1;
 	}
-	thread->processID = id;
+	this->thread->processID = id;
 	
-	parentID = currentThread->processID;
+	this->parentID = currentThread->processID;
 	
-	thread->Fork(MyStartProcess,id);
+	this->thread->Fork(MyStartProcess,id);
 	mutex->V();
 	return id;
 }
@@ -117,15 +117,16 @@ int PCB::Exec(char *filename, int id)
 void MyStartProcess(int pID) //truyen vao vi tri cua PCB trong mang pcb o lop pTab
 {
 	char *filename = pTab->GetName(pID);
-	//char *fileName = this -> GetNameThread();
-	AddrSpace *space= new AddrSpace(fileName);
+	OpenFile * executable = fileSystem->Open(filename);
+
+	AddrSpace *space= new AddrSpace(executable);
 	if(space == NULL)
 	{
 		printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
 		return; 
 	}
-	currentThread->space= space;
 
+	currentThread->space= space;
 	space->InitRegisters();		// set the initial register values
 	space->RestoreState();		// load page table register
 

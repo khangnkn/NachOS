@@ -114,7 +114,7 @@ FILESYS_C =../filesys/directory.cc\
 	../filesys/openfile.cc\
 	../filesys/synchdisk.cc\
 	../machine/disk.cc
-FILESYS_O =directory.o filehdr.o filesys.o fstest.o openfile.o synchdisk.o\
+FILESYS_O = directory.o filehdr.o filesys.o fstest.o openfile.o synchdisk.o\
 	disk.o
 
 NETWORK_H = ../network/post.h ../machine/network.h
