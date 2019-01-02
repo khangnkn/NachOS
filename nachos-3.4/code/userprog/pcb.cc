@@ -10,12 +10,8 @@ PCB::PCB(int id)
 	exitsem= new Semaphore("ExitSem",0);
 	mutex= new Semaphore("Mutex",1);
 	pid= id;
-	exitcode= 0;
+	exitcode=0;
 	numwait= 0;
-	if(id)
-		parentID= currentThread->processID;
-	else
-		parentID= 0;
 	thread= NULL;
 	JoinStatus= -1;
 
@@ -54,13 +50,19 @@ void PCB::SetExitCode(int ec)
 
 void PCB::IncNumWait()
 {
+	//phai doc quyen truy xuat bien numwait dung chung
+	mutex->P();
 	numwait++;
+	mutex->V();
 }
 
 void PCB::DecNumWait()
 {
+	//phai doc quyen truy xuat bien numwait dung chung
+	mutex->P();
 	if(numwait)
 		numwait--;
+	mutex->V();
 }
 
 char* PCB::GetNameThread()
@@ -71,14 +73,12 @@ char* PCB::GetNameThread()
 //-------------------------------------------------------------------
 void PCB::JoinWait()
 {
-	// JoinStatus= parentID;
-	// IncNumWait();
+	JoinStatus = parentID;
 	joinsem->P();
 }
 
 void PCB::JoinRelease()
 {
-	//DecNumWait();
 	joinsem->V();
 }
 
@@ -95,38 +95,38 @@ void PCB::ExitRelease()
 //------------------------------------------------------------------
 int PCB::Exec(char *filename, int id)
 {
-	mutex->P();
+	mutex->P(); // tranh 2 tien trinh nap cung luc
 	this->thread = new Thread(filename);
-	if(thread == NULL)
+	if(this->thread == NULL)
 	{
 		printf("\nLoi: Khong tao duoc tien trinh moi !!!\n");
-		mutex->V();
+		mutex->V(); //neu dinh loi thi tang semaphore len de tien trinh khac thuc hien
 		return -1;
 	}
-	this->thread->processID = id;
+	this->thread->processID = id; //gan id cho luong nay
 	
-	this->parentID = currentThread->processID;
+	this->parentID = currentThread->processID; //tien trinh cha cua luong chinh la tien trinh goi thuc thi Exec
 	
-	this->thread->Fork(MyStartProcess,id);
-	mutex->V();
-	return id;
+	this->thread->Fork(MyStartProcess,id);//khoi chay luong
+	mutex->V(); //tang semaphore de luong khac thuc hien
+	return id; //tra ve id cua luong trong mang PCB o lop pTable
 }
 
 
 //*************************************************************************************
 void MyStartProcess(int pID) //truyen vao vi tri cua PCB trong mang pcb o lop pTab
 {
-	char *filename = pTab->GetName(pID);
-	OpenFile * executable = fileSystem->Open(filename);
+	char *filename = pTab->GetName(pID);//lay ten cua file duoc goi thuc thi o vi tri pID trong mang PCB cua lop pTable
+	OpenFile * executable = fileSystem->Open(filename);//mo file
 
-	AddrSpace *space= new AddrSpace(executable);
+	AddrSpace *space= new AddrSpace(executable); //khoi tao 1 vung nho
 	if(space == NULL)
 	{
 		printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
 		return; 
 	}
 
-	currentThread->space= space;
+	currentThread->space = space;
 	space->InitRegisters();		// set the initial register values
 	space->RestoreState();		// load page table register
 

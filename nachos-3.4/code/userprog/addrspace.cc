@@ -92,7 +92,6 @@ AddrSpace::AddrSpace(OpenFile *executable)
         ASSERT(freeSlot != -1);
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
         pageTable[i].physicalPage = freeSlot;
-        gPhysPageBitMap->Mark(freeSlot);
         pageTable[i].valid = TRUE;
         pageTable[i].use = FALSE;
         pageTable[i].dirty = FALSE;

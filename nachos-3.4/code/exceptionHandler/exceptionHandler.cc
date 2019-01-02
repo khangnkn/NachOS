@@ -378,7 +378,7 @@ void handleSC_Seek()
 void handleSC_Exec()
 {
 	int virtAddr;
-	char * filename = NULL;
+	char * filename;
 	AddrSpace * space;
 	virtAddr = machine->ReadRegister(4);
 	
@@ -400,6 +400,7 @@ void handleSC_Exec()
 	int pid = pTab -> ExecUpdate(filename);
 	machine -> WriteRegister(2, pid);
 	delete executable;
+	delete[] filename;
 	return;
 }
 
@@ -409,7 +410,9 @@ void handleSC_Exit()
 	exitStatus = machine->ReadRegister(4);
 	
 	int result = pTab->ExitUpdate(exitStatus);
-	machine -> WriteRegister(2, result);
+	//machine -> WriteRegister(2, result);
+	currentThread->Finish();
+	return;
 }
 
 void handleSC_Join()
@@ -419,6 +422,7 @@ void handleSC_Join()
 	
 	int result = pTab->JoinUpdate(id);
 	machine -> WriteRegister(2, result);
+	return;
 }
 
 // void DummyForFork(int arg) {

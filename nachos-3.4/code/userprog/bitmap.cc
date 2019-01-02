@@ -77,9 +77,9 @@ BitMap::Test(int which)
     ASSERT(which >= 0 && which < numBits);
     
     if (map[which / BitsInWord] & (1 << (which % BitsInWord)))
-	return TRUE;
+	    return TRUE;
     else
-	return FALSE;
+	    return FALSE;
 }
 
 //----------------------------------------------------------------------

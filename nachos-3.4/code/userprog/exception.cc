@@ -151,6 +151,7 @@ void ExceptionHandler(ExceptionType which)
 			case SC_Exit:
 				handleSC_Exit();
 				break;
+				
 			case SC_Join:
 				handleSC_Join();
 				break;

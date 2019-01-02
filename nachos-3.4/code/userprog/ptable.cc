@@ -8,9 +8,13 @@ PTable::PTable(int size)
 	bm = new BitMap(size);
 	bmsem = new Semaphore("BMsem",1);
 		
-	for(i = 0 ; i < MAXPROCESS ; ++i)
+	for(i = 0 ; i < MAXPROCESS ; i++)
 		pcb[i] = NULL;
+	
+	/*vi tri cua tien trinh cha trong pcb la 0, nhung tien trinh con se su dung tu 1->9*/
 	bm->Mark(0);
+	pcb[0] = new PCB(0);
+	pcb[0]->parentID = -1;
 }
 
 PTable::~PTable()
@@ -28,17 +32,17 @@ PTable::~PTable()
 //--------------------------------------------------------------------
 
 int PTable::ExecUpdate(char* filename)
-{
-	bmsem->P();			//chi nap 1 tien trinh vao mot thoi diem
-
-//kiem tra ten file co bang null hay khong
+{	
+	//doc quyen truy xuat, chi nap 1 tien trinh vao mot thoi diem
+	bmsem->P();
+	//kiem tra ten file co bang null hay khong
 	if(filename == NULL)
 	{
 		printf("\nFile name is null!\n");
 		bmsem->V();
 		return -1;
 	}
-//Kiem tra file co ton tai tren may khong
+	//Kiem tra file co ton tai tren may khong
 	OpenFile *executable = fileSystem->Open(filename);
 	if (executable == NULL) 
 	{
@@ -49,16 +53,16 @@ int PTable::ExecUpdate(char* filename)
 	delete executable;			// close file
 ////////////////////////////////////////////////////////////
 
-//Kiem tra chuong trinh duoc goi co la chinh no khong
+	//Kiem tra chuong trinh duoc goi co la chinh no khong
 	if(strcmp(filename,currentThread->getName())==0)
 	{
-		printf("\nLoi: khong duoc phep goi exce chinh no !!!\n");
+		printf("\nLoi: khong duoc phep goi chinh no !!!\n");
 		bmsem->V();
 		return -1;
 	}
 ////////////////////////////////////////////////////////////
 
-//Kiem tra con slot trong khong
+	//Kiem tra con slot trong khong
 	int ID = GetFreeSlot();
 	if(ID == -1)
 	{
@@ -67,7 +71,6 @@ int PTable::ExecUpdate(char* filename)
 		return -1;
 	}
 ////////////////////////////////////////////////////////////
-
 	pcb[ID]= new PCB(ID);
 	pcb[ID] -> parentID = currentThread -> processID;
 	int pID = pcb[ID]->Exec(filename,ID);
@@ -77,31 +80,31 @@ int PTable::ExecUpdate(char* filename)
 
 int PTable::ExitUpdate(int exitcode)
 {
-//Kiem tra pID co ton tai khong
 	int pID = currentThread->processID;
-	if(!IsExist(pID))
-	{
-		printf("\nLoi: Tien trinh khong ton tai !!!\n");
-		return -1;
-	}
 //////////////////////////////////////////////////////////////
 
-//Neu la main process thi Halt()
+	//Neu la main process thi Halt()
 	if(pID == 0)
 	{
 		interrupt->Halt();
 		return 0;
 	}
 /////////////////////////////////////////////////////////////
-
-	pcb[pID]->SetExitCode(exitcode);
-	
-	if(pcb[pID]->JoinStatus != -1) //neu co tien trinh cha dang doi
+	//kiem tra id cua tien trinh nay co ton tai hay khong
+	if(!IsExist(pID))
 	{
-		pcb[pID]->JoinRelease();
-		pcb[pID]->ExitWait();	
+		printf("\nLoi: Tien trinh khong ton tai !!!\n");
+		return -1;
 	}
-	Remove(pID);
+	pcb[pID]->SetExitCode(exitcode);
+	if(pcb[pID]->JoinStatus!=-1) //co tien trinh cha dang cho
+	{
+		//pcb[0]->DecNumWait(); //giam so tien trinh con ma tien trinh cha phai cho
+
+		pcb[pID]->JoinRelease();//bao hieu cho tien trinh cha biet chuon trinh da thuc hien xong
+		pcb[pID]->ExitWait();//dung o day va cho cho den khi tien trinh cha cho phep ket thuc
+	}
+	Remove(pID);//giai phong vung nho tai vi tri pID trong PCB
 	return exitcode;
 }
 
@@ -123,13 +126,14 @@ int PTable::JoinUpdate(int pID)
 //kiem tra tien trinh dang chay co la cha cua tien trinh can join hay khong
 	if(currentThread->processID != pcb[pID]->parentID)
 	{
-		printf("\nLoi: Ko duoc phep join vao tien trinh khong phai cha cua no !!!\n");
+		printf("\nLoi: Khong duoc phep join vao tien trinh khong phai cha cua no !!!\n");
 		return -1;
 	}
-/////////////////////////////////////////////////////////////////////////////////////////////
-	pcb[pID]->IncNumWait(); //tang numwait
-	pcb[pID]->JoinWait(); 	//doi den khi tien trinh con ket thuc
+///////////////////////////////////////////////////////////////////////////////////////////
+	pcb[pcb[pID]->parentID]->IncNumWait(); //tang so tien trinh con ma tien trinh cha phai cho
+	pcb[pID]->JoinWait(); 	//dung o day va doi cho den khi tien trinh con ket thuc
 
+	//sau khi chuong trinh con goi JoinRelease
 	int exitCode = pcb[pID]->GetExitCode();
 
 	if(exitCode != 0)
@@ -138,8 +142,7 @@ int PTable::JoinUpdate(int pID)
 		return -1;
 	}
 
-	pcb[pID]->ExitRelease();	//cho phep tien trinh con ket thuc
-	
+	pcb[pID]->ExitRelease();//cho phep tien trinh con ket thuc
 	return exitCode;
 }
 
