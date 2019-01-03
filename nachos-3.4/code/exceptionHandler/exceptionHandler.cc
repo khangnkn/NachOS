@@ -424,10 +424,3 @@ void handleSC_Join()
 	machine -> WriteRegister(2, result);
 	return;
 }
-
-// void DummyForFork(int arg) {
-// 	currentThread->space->InitRegisters();
-// 	currentThread->space->RestoreState();
-// 	machine->Run();
-// 	return;
-// }

@@ -82,7 +82,7 @@ int PTable::ExitUpdate(int exitcode)
 {
 	int pID = currentThread->processID;
 //////////////////////////////////////////////////////////////
-
+	//printf("\nTien trinh id = %d dang goi syscall Exit!!!\n", pID);
 	//Neu la main process thi Halt()
 	if(pID == 0)
 	{
@@ -96,14 +96,11 @@ int PTable::ExitUpdate(int exitcode)
 		printf("\nLoi: Tien trinh khong ton tai !!!\n");
 		return -1;
 	}
+	//printf("Tien trinh id = %d co ton tai!!!\n", pID);
 	pcb[pID]->SetExitCode(exitcode);
-	if(pcb[pID]->JoinStatus!=-1) //co tien trinh cha dang cho
-	{
-		//pcb[0]->DecNumWait(); //giam so tien trinh con ma tien trinh cha phai cho
-
-		pcb[pID]->JoinRelease();//bao hieu cho tien trinh cha biet chuon trinh da thuc hien xong
-		pcb[pID]->ExitWait();//dung o day va cho cho den khi tien trinh cha cho phep ket thuc
-	}
+	pcb[pcb[pID]->parentID]->DecNumWait(); //giam so tien trinh con ma tien trinh cha phai cho
+	pcb[pID]->JoinRelease();//bao hieu cho tien trinh cha biet chuon trinh da thuc hien xong
+	pcb[pID]->ExitWait();//dung o day va cho cho den khi tien trinh cha cho phep ket thuc
 	Remove(pID);//giai phong vung nho tai vi tri pID trong PCB
 	return exitcode;
 }
@@ -119,7 +116,7 @@ int PTable::JoinUpdate(int pID)
 
 	if (pcb[pID] == NULL)
 	{
-		printf("Loi: Khong ton tai process id nay!");
+		printf("\nLoi: Khong ton tai process id nay!");
 		return -1;
 	}
 

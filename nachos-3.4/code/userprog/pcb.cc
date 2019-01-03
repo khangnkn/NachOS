@@ -13,7 +13,6 @@ PCB::PCB(int id)
 	exitcode=0;
 	numwait= 0;
 	thread= NULL;
-	JoinStatus= -1;
 }
 
 PCB::~PCB()
@@ -76,7 +75,6 @@ char* PCB::GetNameThread()
 //-------------------------------------------------------------------
 void PCB::JoinWait()
 {
-	JoinStatus = parentID;
 	joinsem->P();
 }
 
