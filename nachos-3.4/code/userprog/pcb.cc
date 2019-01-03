@@ -14,7 +14,6 @@ PCB::PCB(int id)
 	numwait= 0;
 	thread= NULL;
 	JoinStatus= -1;
-
 }
 
 PCB::~PCB()
@@ -25,6 +24,10 @@ PCB::~PCB()
 		delete exitsem;
 	if(mutex != NULL)
 		delete mutex;
+	if(thread!=NULL)
+	{
+		thread->Finish();
+	}
 }
 
 //------------------------------------------------------------------
@@ -45,7 +48,7 @@ int PCB::GetExitCode()
 
 void PCB::SetExitCode(int ec)
 {
-	exitcode= ec;
+	exitcode = ec;
 }
 
 void PCB::IncNumWait()
@@ -60,14 +63,14 @@ void PCB::DecNumWait()
 {
 	//phai doc quyen truy xuat bien numwait dung chung
 	mutex->P();
-	if(numwait)
+	if(numwait>0)
 		numwait--;
 	mutex->V();
 }
 
 char* PCB::GetNameThread()
 {
-	return thread->getName();
+	return this->thread->getName();
 }
 
 //-------------------------------------------------------------------
@@ -103,6 +106,7 @@ int PCB::Exec(char *filename, int id)
 		mutex->V(); //neu dinh loi thi tang semaphore len de tien trinh khac thuc hien
 		return -1;
 	}
+	
 	this->thread->processID = id; //gan id cho luong nay
 	
 	this->parentID = currentThread->processID; //tien trinh cha cua luong chinh la tien trinh goi thuc thi Exec
@@ -114,10 +118,16 @@ int PCB::Exec(char *filename, int id)
 
 
 //*************************************************************************************
-void MyStartProcess(int pID) //truyen vao vi tri cua PCB trong mang pcb o lop pTab
+void MyStartProcess(int id) //truyen vao vi tri cua PCB trong mang pcb o lop pTab
 {
-	char *filename = pTab->GetName(pID);//lay ten cua file duoc goi thuc thi o vi tri pID trong mang PCB cua lop pTable
+	char *filename = pTab->GetName(id);//lay ten cua file duoc goi thuc thi o vi tri pID trong mang PCB cua lop pTable
 	OpenFile * executable = fileSystem->Open(filename);//mo file
+	if(executable==NULL)
+	{
+		printf("\nLoi: Khong the mo file %s o ham MyStartProcess trong Fork voi id = %d!!!\n", filename, id);
+		return;
+	}
+	//printf("\nMo thanh cong file %s o ham MyStartProcess trong Fork voi id = %d!!!\n", filename, id);
 
 	AddrSpace *space= new AddrSpace(executable); //khoi tao 1 vung nho
 	if(space == NULL)
