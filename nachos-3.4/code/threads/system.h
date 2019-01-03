@@ -17,6 +17,7 @@
 #include "timer.h"
 #include "list.h"
 #include "ptable.h"
+#include "Stable.h"
 
 // Initialization and cleanup routines
 extern void Initialize(int argc, char **argv); 	// Initialization,
@@ -47,6 +48,7 @@ extern SynchConsole* gSynchConsole;
 extern BitMap * gPhysPageBitMap;
 extern PTable *pTab;		// quan ly bang tien trinh
 extern Semaphore *addrLock;	// semaphore
+extern Stable *semTab;
 #endif
 
 #ifdef FILESYS_NEEDED 		// FILESYS or FILESYS_STUB 

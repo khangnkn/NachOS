@@ -33,7 +33,9 @@
 #define SC_ConsoleRead   12
 #define SC_Seek 	13
 #define SC_PrintChar    14
-
+#define SC_CreateSemaphore 15
+#define SC_Up 16
+#define SC_Down 17
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -68,7 +70,9 @@ SpaceId Exec(char *name);
  */
 int Join(SpaceId id); 	
  
-
+int CreateSemaphore(char *semName, int semVal);
+int Up(char *semName);
+int Down(char *semName);
 /* File system operations: Create, Open, Read, Write, Close
  * These functions are patterned after UNIX -- files represent
  * both files *and* hardware I/O devices.

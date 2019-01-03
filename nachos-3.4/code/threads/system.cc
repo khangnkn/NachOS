@@ -17,7 +17,7 @@ Scheduler *scheduler;			// the ready list
 Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
-List * gThread = new List();					// for invoking context switches
+//List * gThread = new List();					// for invoking context switches
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -39,6 +39,7 @@ SynchConsole* gSynchConsole;	// user program memory and registers
 BitMap* gPhysPageBitMap;	// user program memory and registers
 PTable *pTab;	
 Semaphore *addrLock;	// semaphore
+Stable *semTab;
 #endif
 
 #ifdef NETWORK
@@ -169,6 +170,7 @@ Initialize(int argc, char **argv)
     gPhysPageBitMap = new BitMap(NumPhysPages);	// this must come first
     addrLock = new Semaphore("addrLock", 1);
     pTab = new PTable(10);//maximun 10 pcb
+    semTab = new Stable();
 #endif
 
 #ifdef FILESYS
@@ -205,6 +207,10 @@ Cleanup()
 
 #ifdef USER_PROGRAM
     delete gPhysPageBitMap;
+#endif
+
+#ifdef USER_PROGRAM
+    delete semTab;
 #endif
 
 #ifdef FILESYS_NEEDED

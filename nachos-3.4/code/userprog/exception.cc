@@ -155,6 +155,18 @@ void ExceptionHandler(ExceptionType which)
 			case SC_Join:
 				handleSC_Join();
 				break;
+
+			case SC_CreateSemaphore:
+				handleSC_CreateSemaphore();
+				break;
+
+			case SC_Up:
+				handleSC_Up();
+				break;
+				
+			case SC_Down:
+				handleSC_Down();
+				break;
 		}
 		IncreasePC();
 		return;

@@ -55,3 +55,7 @@ void handleSC_Exit();
 
 // Handler for SC_Join
 void handleSC_Join();
+
+void handleSC_CreateSemaphore();
+void handleSC_Up();
+void handleSC_Down();

@@ -379,7 +379,6 @@ void handleSC_Exec()
 {
 	int virtAddr;
 	char * filename;
-	AddrSpace * space;
 	virtAddr = machine->ReadRegister(4);
 	
 	filename = User2System(virtAddr, 255);
@@ -423,4 +422,38 @@ void handleSC_Join()
 	int result = pTab->JoinUpdate(id);
 	machine -> WriteRegister(2, result);
 	return;
+}
+void handleSC_CreateSemaphore()
+{
+	int virtAddr;
+	char * semName;
+	int semVal;
+	AddrSpace * space;
+	virtAddr = machine->ReadRegister(4);
+	semVal = machine -> ReadRegister(5);
+	semName = User2System(virtAddr, 255);
+	int id = semTab -> Create(semName, semVal);
+	machine->WriteRegister(2, id);
+}
+void handleSC_Up()
+{
+	int virtAddr;
+	char * semName;
+	int semVal;
+	AddrSpace * space;
+	virtAddr = machine->ReadRegister(4);
+	semName = User2System(virtAddr, 255);
+	int id = semTab->Signal(semName);
+	machine->WriteRegister(2, id);
+}
+void handleSC_Down()
+{
+	int virtAddr;
+	char * semName;
+	int semVal;
+	AddrSpace * space;
+	virtAddr = machine->ReadRegister(4);
+	semName = User2System(virtAddr, 255);
+	int id = semTab->Wait(semName);
+	machine->WriteRegister(2, id);
 }
