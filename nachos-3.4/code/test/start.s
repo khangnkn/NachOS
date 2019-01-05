@@ -153,6 +153,7 @@ PrintChar:
 	syscall
 	j	$31
 	.end PrintChar
+
 	.globl Seek
 	.ent	Seek
 Seek:
@@ -160,6 +161,30 @@ Seek:
 	syscall
 	j	$31
 	.end Seek
+
+	.globl CreateSemaphore
+	.ent	CreateSemaphore
+CreateSemaphore:
+	addiu $2,$0,SC_CreateSemaphore
+	syscall
+	j	$31
+	.end CreateSemaphore
+
+	.globl Up
+	.ent	Up
+Up:
+	addiu $2,$0,SC_Up
+	syscall
+	j	$31
+	.end Up
+
+	.globl Down
+	.ent	Down
+Down:
+	addiu $2,$0,SC_Up
+	syscall
+	j	$31
+	.end Down
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main

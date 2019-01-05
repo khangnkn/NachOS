@@ -1,3 +1,4 @@
+
 # use normal make for this Makefile
 #
 # Makefile for building user programs to run on top of Nachos
@@ -35,7 +36,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort createFile cat echo copy scheduler ping pong
+all: halt shell matmult sort createFile cat echo copy scheduler ping pong ProducerConsumer
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -110,3 +111,9 @@ pong.o: pong.c
 pong: pong.o start.o
 	$(LD) $(LDFLAGS) start.o pong.o -o pong.coff
 	../bin/coff2noff pong.coff pong
+
+ProducerConsumer.o: ProducerConsumer.c
+	$(CC) $(CFLAGS) -c ProducerConsumer.c
+ProducerConsumer: ProducerConsumer.o start.o
+	$(LD) $(LDFLAGS) start.o ProducerConsumer.o -o ProducerConsumer.coff
+	../bin/coff2noff ProducerConsumer.coff ProducerConsumer
