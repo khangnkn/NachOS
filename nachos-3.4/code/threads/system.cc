@@ -19,6 +19,7 @@ Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
 //List * gThread = new List();					// for invoking context switches
 
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -33,6 +34,9 @@ Machine *machine;	// user program memory and registers
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
 SynchConsole* gSynchConsole;	// user program memory and registers
+int in;
+int out;
+int *buffer;
 #endif
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
@@ -91,7 +95,7 @@ Initialize(int argc, char **argv)
     int argCount;
     char* debugArgs = "";
     bool randomYield = FALSE;
-
+   
 #ifdef USER_PROGRAM
     bool debugUserProg = FALSE;	// single step user program
 #endif
@@ -164,6 +168,9 @@ Initialize(int argc, char **argv)
 
 #ifdef USER_PROGRAM
     gSynchConsole = new SynchConsole();	// this must come first
+    in =0;
+    out =0;
+    buffer = new int[10];
 #endif
 
 #ifdef USER_PROGRAM

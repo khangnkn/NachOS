@@ -70,11 +70,13 @@ int Stable::Wait(char *name)
         return -1;
     }
     int id = FindSemByName(name);
+    //printf("\n\tStable.cc->wait(): id = %d", id);
     if(id==-1)
     {
         printf("\nKhong ton tai semaphore %s\n", name);
         return -1;
     }
+    
     semTab[id]->wait();
     return id;
 }
@@ -91,6 +93,7 @@ int Stable::Signal(char *name)
         printf("\nKhong ton tai semaphore %s\n", name);
         return -1;
     }
+    //printf("\n\tStable.cc->signal(): id = %d", id);
     semTab[id]->signal();
     return id;
 }

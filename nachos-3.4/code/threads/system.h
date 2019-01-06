@@ -33,6 +33,7 @@ extern Statistics *stats;			// performance metrics
 extern Timer *timer;				// the hardware alarm clock
 extern List * gThread;
 
+
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine* machine;	// user program memory and registers
@@ -41,6 +42,9 @@ extern Machine* machine;	// user program memory and registers
 #ifdef USER_PROGRAM
 #include "synchcons.h"
 extern SynchConsole* gSynchConsole;
+extern int in;
+extern int out;
+extern int *buffer;
 #endif
 
 #ifdef USER_PROGRAM

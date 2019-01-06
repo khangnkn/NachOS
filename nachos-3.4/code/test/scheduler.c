@@ -5,8 +5,9 @@ int main()
     int pingID, pongID;
 
     pingID = Exec("./test/ping");
-    pongID = Exec("./test/pong");
     Join(pingID);
+    pongID = Exec("./test/pong");
+    
     Join(pongID);  
     return 0;
 }

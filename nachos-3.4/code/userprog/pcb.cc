@@ -107,7 +107,7 @@ int PCB::Exec(char *filename, int id)
 	
 	this->thread->processID = id; //gan id cho luong nay
 	
-	this->parentID = currentThread->processID; //tien trinh cha cua luong chinh la tien trinh goi thuc thi Exec
+	// this->parentID = currentThread->processID; //tien trinh cha cua luong chinh la tien trinh goi thuc thi Exec
 	
 	this->thread->Fork(MyStartProcess,id);//khoi chay luong
 	mutex->V(); //tang semaphore de luong khac thuc hien

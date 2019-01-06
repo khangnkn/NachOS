@@ -181,7 +181,7 @@ Up:
 	.globl Down
 	.ent	Down
 Down:
-	addiu $2,$0,SC_Up
+	addiu $2,$0,SC_Down
 	syscall
 	j	$31
 	.end Down

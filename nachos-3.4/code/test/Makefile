@@ -36,7 +36,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort createFile cat echo copy scheduler ping pong ProducerConsumer
+all: halt shell matmult sort createFile cat echo copy scheduler ping pong person1 person2  greeting
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -112,8 +112,21 @@ pong: pong.o start.o
 	$(LD) $(LDFLAGS) start.o pong.o -o pong.coff
 	../bin/coff2noff pong.coff pong
 
-ProducerConsumer.o: ProducerConsumer.c
-	$(CC) $(CFLAGS) -c ProducerConsumer.c
-ProducerConsumer: ProducerConsumer.o start.o
-	$(LD) $(LDFLAGS) start.o ProducerConsumer.o -o ProducerConsumer.coff
-	../bin/coff2noff ProducerConsumer.coff ProducerConsumer
+person1.o: person1.c
+	$(CC) $(CFLAGS) -c person1.c
+person1: person1.o start.o
+	$(LD) $(LDFLAGS) start.o person1.o -o person1.coff
+	../bin/coff2noff person1.coff person1
+
+person2.o: person2.c
+	$(CC) $(CFLAGS) -c person2.c
+person2: person2.o start.o
+	$(LD) $(LDFLAGS) start.o person2.o -o person2.coff
+	../bin/coff2noff person2.coff person2
+
+greeting.o: greeting.c
+	$(CC) $(CFLAGS) -c greeting.c
+greeting: greeting.o start.o
+	$(LD) $(LDFLAGS) start.o greeting.o -o greeting.coff
+	../bin/coff2noff greeting.coff greeting
+
