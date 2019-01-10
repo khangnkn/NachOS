@@ -23,7 +23,7 @@ all:
 clean:
 	find . -name \*.o -type f -delete
 	find . -name \*.coff -type f -delete
-	cd test; rm createFile cat echo copy scheduler ping pong halt
+	cd test; rm createFile cat echo copy scheduler ping pong halt person1 person2 greeting
 
 print:
 	/bin/csh -c "$(LPR) Makefile* */Makefile"
